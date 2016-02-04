@@ -41,6 +41,29 @@ router.delete('/api/days/:num', function(req, res) {
   })
 })
 
+router.delete('/api/days/:num/:id', function(req, res) {
+      var option;
+      var type = req.body.type;
+      if(type === 'hotel'){
+        option = {$set: {hotel: null}};
+       }else option = {$pull: {[type]: req.params.id}};
+          console.log(req.params.id)
+
+    Day.findOneAndUpdate(
+      {number: req.params.num}, option)
+        .then(function(day) {
+          console.log('deleted '+day)
+            res.send({
+                message: 'deleted successfully',
+                day: day
+            });
+        })
+        .then(null, function(err) {
+            res.statusCode = 500;
+            res.send(err);
+        })
+})
+
 
 router.get('/api/days/:id/:type', function(req, res) {
   res.send('get day '+req.params.id+' '+req.params.type);
