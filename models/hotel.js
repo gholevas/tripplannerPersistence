@@ -3,6 +3,7 @@ var PlaceSchema = require('./place').schema;
 
 var HotelSchema = new mongoose.Schema({
   name: String,
+  type: {type:String,default:'hotel'},
   place: [PlaceSchema],
   num_stars: { type: Number, min: 1, max: 5 },
   amenities: { type: [String] }

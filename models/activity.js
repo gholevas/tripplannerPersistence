@@ -3,6 +3,7 @@ var PlaceSchema = require('./place').schema;
 
 var ActivitySchema = new mongoose.Schema({
   name: String,
+  type: {type:String,default:'activity'},
   place: [PlaceSchema],
   age_range: String
 })
