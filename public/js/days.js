@@ -107,8 +107,41 @@ var daysModule = (function() {
       return result;
     }
 
+    Day.prototype.updateNumber = function(){
+        var oldDay = this.number;
+        this.number =days.indexOf(this)+1;
+        $.ajax({
+            method: 'PUT',
+            url: '/api/days/'+oldDay,
+            success: function(responseData) {
+                console.log('day deleted');
+            },
+            error: function(errorObj) {
+                console.log(errorObj);
+            }
+        });
+    }
+
     function deleteCurrentDay() {
-        console.log('will delete this day:', currentDay);
+        var dayIn = currentDay.number -1;
+        var day1 = dayIn+1;
+        days.splice(dayIn,1);
+        for (var i = dayIn; i < days.length; i++) {
+            days[i].updateNumber();
+        };
+        days[0].switchTo();
+        $('.day-btn:last').remove();
+        $.ajax({
+            method: 'DELETE',
+            url: '/api/days/'+day1,
+            success: function(responseData) {
+                console.log('day deleted');
+            },
+            error: function(errorObj) {
+                console.log(errorObj);
+            }
+        });
+        console.log(this);
     }
 
     // jQuery event binding
@@ -135,7 +168,6 @@ var daysModule = (function() {
                       var x;
                       for (var i = 0; i < days.length; i++) {
                            x = new Day(makeAttractionChecker([days[i].hotel]), makeAttractionChecker(days[i].restaurant), makeAttractionChecker(days[i].activity));
-                        console.log(x);
                       };
                       currentDay = x;
                       x.switchTo();

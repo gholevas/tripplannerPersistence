@@ -41,6 +41,27 @@ router.delete('/api/days/:num', function(req, res) {
   })
 })
 
+router.put('/api/days/:old/', function(req, res) {
+  
+  var old = +req.params.old;
+  var num = old - 1;
+  Day.findOne(
+  {number:req.params.old}
+    )
+  .then(function(stuff){
+    stuff.number = num;
+    res.send(stuff);
+    return stuff.save();
+    console.log('old '+old+ 'num'+num)
+  })
+  .then(null,function(err){
+    console.log('error: ' + err)
+    throw err;
+  })
+})
+
+
+
 router.delete('/api/days/:num/:id', function(req, res) {
       var option;
       var type = req.body.type;
